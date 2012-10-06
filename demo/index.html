@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<script type="text/javascript" src="../proreq.js"></script>
+<script type="text/javascript">
+    provide('com.company.product', function () {
+        alert("New product");
+    });
+
+    var product = require('com.company.product');
+
+    product();
+</script>
+</body>
+</html>
