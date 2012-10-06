@@ -93,7 +93,7 @@
             delete _cache[path];
         }
 
-        return provide(path, {}, {cache:true, override:true, package:true});
+        return Provide(path, {}, {cache:true, override:true, package:true});
     };
 
     /**
