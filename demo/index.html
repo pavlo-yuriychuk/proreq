@@ -6,11 +6,11 @@
 <body>
 <script type="text/javascript" src="../proreq.js"></script>
 <script type="text/javascript">
-    provide('com.company.product', function () {
+    Provide('com.company.product', function () {
         alert("New product");
     });
 
-    var product = require('com.company.product');
+    var product = Require('com.company.product');
 
     product();
 </script>
