@@ -51,3 +51,17 @@ test("Traversal testing", function () {
     equal(fqn(__ns), "", "Fully qualified name of global namespace is empty string");
     deepEqual(Require(""), __ns, "Root namespace is Required properly");
 });
+
+test("Elvis function testing", function() {
+   var obj = {
+      property1 : 'property1value'
+   };
+   equal(elvis(obj, 'property'), undefined);
+   equal(elvis(obj, 'property1'), 'property1value');
+   deepEqual(elvis(obj, 'property1.property2', 'newValue'),{property2: 'newValue'});
+   equal(elvis(obj, 'property1.property2'), 'newValue');
+
+   equal(typeof obj.elvis, 'function');
+   equal(obj.elvis('property1.property2'), 'newValue');
+   deepEqual(obj.elvis('property1.property2.property3','newValue'), {property3:'newValue'});
+});
