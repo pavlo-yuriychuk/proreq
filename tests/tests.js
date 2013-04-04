@@ -65,3 +65,80 @@ test("Elvis function testing", function() {
    equal(obj.elvis('property1.property2'), 'newValue');
    deepEqual(obj.elvis('property1.property2.property3','newValue'), {property3:'newValue'});
 });
+
+test("Stub feature testing", function() {
+   var stub = new Stub('Test');
+
+   stub.method('foo').
+        when(1).
+         returns(2).
+        when(3).
+         returns(4).
+        otherwise().
+         returns(5).
+         done();
+
+   stub.method('baz').
+        always().
+         returns(4).
+        done();
+
+   stub.method('wrong').
+        always().
+        otherwise().
+        done();
+
+   stub.iterator('iter').
+        always().
+         yields(4).
+        done();
+
+   stub.iterator('iter1').
+        yields(3).
+        yields(5).
+        done();
+
+   stub.property('array1',[1,2,3,4,5]).done();
+
+   stub.iterator('iter2').bindTo('array1').done();
+
+   equal(typeof stub.foo, 'function');
+   equal(stub.foo(1),2);
+   equal(stub.foo(3),4);
+   equal(stub.foo(),5);
+   equal(stub.foo(100),5);
+   equal(stub.foo(false),5);
+   equal(stub.foo('sd'),5);
+
+   equal(typeof stub.baz, 'function');
+   equal(stub.baz(1),4);
+   equal(stub.baz([]),4);
+   equal(stub.baz({}),4);
+   equal(stub.baz('eee'),4);
+   equal(stub.baz(true),4);
+
+   equal(typeof stub.wrong, 'function');
+   equal(stub.wrong(1),undefined);
+   equal(stub.wrong([]),undefined);
+   equal(stub.wrong({}),undefined);
+   equal(stub.wrong('eee'),undefined);
+   equal(stub.wrong(true),undefined);
+
+   equal(stub.iter.next(), 4);
+   equal(stub.iter.next(), 4);
+   equal(stub.iter.next(), 4);
+
+   equal(stub.iter1.next(), 3);
+   equal(stub.iter1.next(), 5);
+   equal(stub.iter1.next(), null);
+
+   deepEqual(stub.array1, [1,2,3,4,5]);
+
+   equal(stub.iter2.next(), 1);
+   equal(stub.iter2.next(), 2);
+   equal(stub.iter2.next(), 3);
+   equal(stub.iter2.next(), 4);
+   equal(stub.iter2.next(), 5);
+   equal(stub.iter2.next(), null);
+
+});
