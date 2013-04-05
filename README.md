@@ -13,6 +13,7 @@ Pavlo Yuriychuk, 2012
 API
 ------
 
+##Proreq
 Methods:
 * `Require($path)` - obtain entity from global namespace by given path. Path is Java/ActionScript like package fully qualified name
 * `Provide($path, $entity)` - put entity into the namespace by given path
@@ -21,6 +22,29 @@ Methods:
 * `fqn($entity)` - compose fully qualified name for given entity
 
 In order to obtain global namespace use `require("")` call
+
+##Stub
+
+`p = new Stub('Person').`
+`   method('say').`
+`       when('hi').`
+`           returns('Goedemorgen!')`
+`       otherwise().`
+`           returns('Mm-mm-m-mm').`
+`       done();`
+
+`p.iterator('i').`
+`   always().`
+`       yields(3).`
+`   done();`
+
+`p.say('hi');`
+`p.say('dsdsdsdsd');`
+`p.say();`
+
+`p.i.next();// == 3`
+`p.i.next();// == 3`
+
 
 Acknowledgements
 -----------------

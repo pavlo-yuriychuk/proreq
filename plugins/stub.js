@@ -9,6 +9,8 @@
       this.methods = {};
       this.properties = {};
       this.iterators = {};
+	  this.constructor = arguments.callee;
+	  return this;
    };
 
 
@@ -114,30 +116,40 @@
          };
          return this;
       },
+	  static: function() {
+		  if (this.currentMethodName) {
+			  this.methods[this.currentMethodName].static = true;
+		  } else if (this.currentPropertyName) {
+			  this.properties[this.currentPropertyName].static = true;
+		  } else if (this.currentIteratorName) {
+			  this.iterators[this.currentIteratorName].static = true;
+		  }
+		  return this;
+	  },
       done: function() {
          if (this.currentMethodName) {
-            var methodObj = this.methods[this.currentMethodName];
+            var methodObj = this.methods[this.currentMethodName], context = (methodObj.static && this.constructor) || this;
             methodObj.when = methodObj.when || {};
+
             if (methodObj.always === true) {
                methodObj.always = undefined;
             };
             if (methodObj.otherwise === true) {
                methodObj.otherwise = undefined;
             };
-            this[this.currentMethodName] = function() {
+	        context[this.currentMethodName] = function() {
                return methodObj.always || methodObj.when[JSON.stringify(Array.prototype.slice.apply(arguments))] || methodObj.otherwise;
             };
          } else if (this.currentPropertyName) {
-            var propertyObj = this.properties[this.currentPropertyName];
+            var propertyObj = this.properties[this.currentPropertyName], context = (propertyObj.static && this.constructor) || this;
             if (propertyObj.constant) {
-               Object.defineProperty(this, this.currentPropertyName, {
-                  writable : false,
+               Object.defineProperty(context, this.currentPropertyName, {
                   get: function() {
                      return propertyObj.value;
                   }
                });
             } else {
-               Object.defineProperty(this, this.currentPropertyName, {
+               Object.defineProperty(context, this.currentPropertyName, {
                   get: function() {
                      return propertyObj.value;
                   },
@@ -149,11 +161,11 @@
                });
             };
          } else if (this.currentIteratorName) {
-            var iteratorObj = this.iterators[this.currentIteratorName];
+            var iteratorObj = this.iterators[this.currentIteratorName], context = (iteratorObj.static && this.constructor) || this;
             if (iteratorObj.always === true) {
                iteratorObj.always = undefined;
             }
-            this[this.currentIteratorName] = {
+	        context[this.currentIteratorName] = {
                next: function() {
                   if (this.always) {
                      return this.always;

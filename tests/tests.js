@@ -102,6 +102,12 @@ test("Stub feature testing", function() {
 
    stub.iterator('iter2').bindTo('array1').done();
 
+   stub.property('static').value(44).static().done();
+
+   stub.property('static1').value(44).type('number').variable().done();
+
+   stub.property('static2').value(34).type('number').constant().done();
+
    equal(typeof stub.foo, 'function');
    equal(stub.foo(1),2);
    equal(stub.foo(3),4);
@@ -134,11 +140,21 @@ test("Stub feature testing", function() {
 
    deepEqual(stub.array1, [1,2,3,4,5]);
 
+   equal(Stub.static, 44);
+
    equal(stub.iter2.next(), 1);
    equal(stub.iter2.next(), 2);
    equal(stub.iter2.next(), 3);
    equal(stub.iter2.next(), 4);
    equal(stub.iter2.next(), 5);
    equal(stub.iter2.next(), null);
+
+   equal(stub.static1, 44);
+   stub.static1 = 55;
+   equal(stub.static1, 55);
+
+   equal(stub.static2, 34);
+   stub.static2 = 43;
+   equal(stub.static2, 34);
 
 });
