@@ -15,6 +15,11 @@
 
 
    Stub.ANY = '*';
+   Stub.NUMBER = 'number';
+   Stub.FUNCTION = 'function';
+   Stub.STRING = 'string';
+   Stub.OBJECT = 'object';
+   Stub.BOOLEAN = 'boolean';
 
    Stub.prototype = {
       method: function(name) {
@@ -154,9 +159,11 @@
                      return propertyObj.value;
                   },
                   set: function(value) {
-                     if (typeof value === propertyObj.type) {
-                        propertyObj.value = value;
-                     }
+	                 if (propertyObj.type !== Stub.ANY) {
+	                     if (typeof value === propertyObj.type) {
+	                        propertyObj.value = value;
+	                     };
+	                 };
                   }
                });
             };
